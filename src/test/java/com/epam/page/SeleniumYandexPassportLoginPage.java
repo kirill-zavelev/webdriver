@@ -10,9 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class SeleniumYandexPassportLoginPage {
 
     By userNameLocator = By.id("passp-field-login");
-    By passwordLocator = By.xpath("//*[@id='passp-field-passwd']");
-    By submitLoginLocator = By.xpath("//*[@id='root']/div/div/div[2]/div/div/div[3]/div[2]/div/div/div[1]/form/div[3]/button[1]");
-    By submitPasswordLocator = By.xpath("//*[@id='root']/div/div/div[2]/div/div/div[3]/div[2]/div/div/form/div[2]/button[1]");
+    By passwordLocator = By.id("passp-field-passwd");
+    By submitLoginLocator = By.id("passp-button passp-sign-in-button");
+    By submitPasswordLocator = By.className("passp-button passp-sign-in-button");
 
     private final WebDriver driver;
 
@@ -30,9 +30,9 @@ public class SeleniumYandexPassportLoginPage {
                 .until(ExpectedConditions
                         .visibilityOf(driver.findElement(By.xpath("//*[@id='root']/div/div/footer"))));
         driver.findElement(submitLoginLocator).click();
-        new WebDriverWait(driver, 30000)
+        new WebDriverWait(driver, 1000)
                 .until(ExpectedConditions
-                        .visibilityOf(driver.findElement(passwordLocator)));
+                        .elementToBeClickable(passwordLocator));
         return this;
     }
 
