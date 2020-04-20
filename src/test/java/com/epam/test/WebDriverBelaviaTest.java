@@ -15,91 +15,40 @@ import org.testng.asserts.Assertion;
 
 public class WebDriverBelaviaTest {
 
+    private static final String USERNAME = "buben.vika";
+    private static final String PASSWORD = "55555555vika";
+    private static final String EMAIL = "buben.vika@yandex.by";
+    private static final String BASE_URL = "http://passport.yandex.ru";
+
     private WebDriver driver;
 
-    @BeforeMethod (alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     public void setUpBrowser() {
         driver = new ChromeDriver();
-        driver.get("http://passport.yandex.ru");
+        driver.manage().window().maximize();
+        driver.get(BASE_URL);
 
     }
-    @AfterMethod (alwaysRun = true)
+
+    @AfterMethod(alwaysRun = true)
     public void tearDownBrowser() {
+        driver.close();
         driver.quit();
         driver = null;
     }
 
-    @Test(description = "verifyUrlOfStartPage")
-    public void startPageHasValidUrl() {
-        driver.get("http://belavia.by");
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions
-                        .presenceOfAllElementsLocatedBy(By.xpath("//*[@id='ibe']")));
-        String actualURL = driver.getCurrentUrl();
-        Assert.assertEquals(actualURL, "https://belavia.by/");
-        driver.quit();
-    }
-
-    @Test(description = "")
-    public void departureSearchFieldInput() {
-//        WebElement departureSearchField = waitForElementLocatedBy(driver,
-//                By.xpath("//*[@id='OriginLocation_Combobox']"));
-        WebElement departureSearchField = waitForElementLocatedBy(driver,
-                By.xpath("//*[@id='OriginLocation_Combobox']"));
-        departureSearchField.sendKeys("Минск (MSQ), BY");
-        new WebDriverWait(driver, 1000)
-                .until(ExpectedConditions
-                .visibilityOf(driver.findElement(By.xpath("//*[@id='footer']"))));
-        String actualResult = departureSearchField.getText();
-        System.out.println(actualResult);
-//        String expectedResult = "Минск (MSQ), BY";
-//        Assert.assertEquals(actualResult, expectedResult);
-    }
-
-    @Test(description = "")
-    public void arrivalSearchFieldInput() {
-        WebElement arrivalSearchField = waitForElementLocatedBy(driver,
-                By.xpath("//*[@id='DestinationLocation_Combobox']"));
-        arrivalSearchField.sendKeys("Москва (MOW), RU");
-        new WebDriverWait(driver, 50)
-                .until(ExpectedConditions
-                        .visibilityOf(driver.findElement(By.xpath("//*[@id='footer']"))));
-        String actualResult = arrivalSearchField.getText();
-        String expectedResult = "Москва (MOW), RU";
-        Assert.assertEquals(actualResult, expectedResult);
-    }
-
-    @Test(description = "")
-    public void test() {
+    @Test
+    public void loginTest() {
         SeleniumYandexPassportLoginPage page = new SeleniumYandexPassportLoginPage(driver);
-        page.typeUserName("buben.vika")
+
+        String actualEmail = page.typeUserName(USERNAME)
                 .submitLogin()
-                .typePassword("55555555vika")
-                .submitPassword();
-//        WebElement departureSearchField = waitForElementLocatedBy(driver,
-//                By.xpath("//*[@id='OriginLocation_Combobox']"));
-                        //        WebElement departureSearchField = waitForElementLocatedBy(driver,
-                        //                By.id("passp-field-login"));
-                        //        departureSearchField.sendKeys("buben.vika");
-                        //        new WebDriverWait(driver, 1000)
-                        //                .until(ExpectedConditions
-                        //                        .visibilityOf(driver.findElement(By.xpath("//*[@id='root']/div/div/footer"))));
-                        //        driver.findElement(
-                        //                By.xpath("//*[@id='root']/div/div/div[2]/div/div/div[3]/div[2]/div/div/div[1]/form/div[3]/button[1]")).click();
-                        //        WebElement passwordField = waitForElementLocatedBy(driver,
-                        //                By.id("passp-field-passwd"));
-                        //        passwordField.sendKeys("55555555vika");
-                        //        driver.findElement(
-                        //                By.xpath("//*[@id='root']/div/div/div[2]/div/div/div[3]/div[2]/div/div/form/div[2]/button[1]")).click();
-                        //        Thread.sleep(1000);
-                        //        driver.getCurrentUrl();
-//        String actualResult = departureSearchField.getText();
-//        String expectedResult = "Минск";
-//        Assert.assertEquals(actualResult, expectedResult);
+                .typePassword(PASSWORD)
+                .submitPassword()
+                .clickOnUsername(USERNAME)
+                .getActualEmail(EMAIL);
+
+        Assert.assertEquals(actualEmail, EMAIL);
     }
 
-    private static WebElement waitForElementLocatedBy(WebDriver driver, By by) {
-        return new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.presenceOfElementLocated(by));
-    }
 }
