@@ -10,6 +10,7 @@ public class SeleniumYandexPassportLoginPage extends AbstractPage {
     private static final By SUBMIT_LOGIN_LOCATOR = By.xpath("//*[@id='root']/div/div/div[2]/div/div/div[3]/div[2]/div/div/div[1]/form/div[3]/button[1]");
     private static final By SUBMIT_PASSWORD_LOCATOR = By.xpath("//*[@id='root']/div/div/div[2]/div/div/div[3]/div[2]/div/div/form/div[2]/button[1]");
     private static final By FOOTER_LOCATOR = By.xpath("//*[@id='root']/div/div/footer");
+    private static final By LOGOUT_LINK = By.xpath("//a[text()='Выйти']");
 
     public SeleniumYandexPassportLoginPage(WebDriver driver) {
         super(driver);
@@ -42,7 +43,7 @@ public class SeleniumYandexPassportLoginPage extends AbstractPage {
     }
 
     public SeleniumYandexPassportLoginPage clickOnUsername(String username) {
-        By usernameLocator = By.xpath(getBaseSpanTextLocator(username));
+        By usernameLocator = getBaseSpanTextLocator(username);
         waitForElementToBeClickable(usernameLocator);
         driver.findElement(usernameLocator).click();
 
@@ -50,12 +51,21 @@ public class SeleniumYandexPassportLoginPage extends AbstractPage {
     }
 
     public String getActualEmail(String expectedEmail) {
-        By emailLocator = By.xpath(getBaseSpanTextLocator(expectedEmail));
+        By emailLocator = getBaseSpanTextLocator(expectedEmail);
 
         return driver.findElement(emailLocator).getText();
     }
 
-    private String getBaseSpanTextLocator(String text) {
-        return "//span[text()='" + text + "']";
+    public SeleniumYandexPassportLoginPage clickOnLogoutLink() {
+        clickElementWhenItDisplayed(LOGOUT_LINK);
+
+        return this;
     }
+
+    public boolean isPasswordInputInteractable() {
+        waitForVisibilityOf(PASSWORD_LOCATOR);
+
+        return driver.findElement(PASSWORD_LOCATOR).isDisplayed();
+    }
+
 }

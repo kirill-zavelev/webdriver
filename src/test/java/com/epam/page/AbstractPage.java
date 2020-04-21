@@ -22,8 +22,19 @@ public abstract class AbstractPage {
     }
 
     protected WebElement waitForVisibilityOf(By by) {
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(by)));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
+    protected By getBaseSpanTextLocator(String text) {
+        return By.xpath("//span[text()='" + text + "']");
+    }
+
+    protected void clickElementWhenItDisplayed(By by) {
+        driver.findElements(by).forEach(sendButton -> {
+            if (sendButton.isDisplayed()) {
+                sendButton.click();
+            }
+        });
+    }
 }

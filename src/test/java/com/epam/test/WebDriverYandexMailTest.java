@@ -1,19 +1,15 @@
 package com.epam.test;
 
+import com.epam.model.Email;
 import com.epam.page.SeleniumYandexMailPage;
 import com.epam.page.SeleniumYandexPassportLoginPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.asserts.Assertion;
 
 public class WebDriverYandexMailTest {
 
@@ -21,10 +17,8 @@ public class WebDriverYandexMailTest {
     private static final String PASSWORD = "55555555vika";
     private static final String EMAIL = "buben.vika@yandex.by";
     private static final String BASE_URL = "http://passport.yandex.ru";
-    private static final String RECEPIENT = "kiri4by@gmail.com";
-    private static final String SUBJECT = "Subject";
-    private static final String BODY = "Body";
 
+    private SeleniumYandexPassportLoginPage loginPage;
     private WebDriver driver;
 
     @BeforeMethod(alwaysRun = true)
@@ -34,6 +28,12 @@ public class WebDriverYandexMailTest {
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.get(BASE_URL);
+
+        loginPage = new SeleniumYandexPassportLoginPage(driver);
+        loginPage.typeUserName(USERNAME)
+                .submitLogin()
+                .typePassword(PASSWORD)
+                .submitPassword();
 
     }
 
@@ -46,34 +46,58 @@ public class WebDriverYandexMailTest {
 
     @Test
     public void loginTest() {
-        SeleniumYandexPassportLoginPage loginPage = new SeleniumYandexPassportLoginPage(driver);
 
-        String actualEmail = loginPage.typeUserName(USERNAME)
-                .submitLogin()
-                .typePassword(PASSWORD)
-                .submitPassword()
+        String actualEmail = loginPage
                 .clickOnUsername(USERNAME)
                 .getActualEmail(EMAIL);
 
         Assert.assertEquals(actualEmail, EMAIL);
-
-
-        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
-
-        mailPage.openMailBox()
-                .createNewMail(RECEPIENT, SUBJECT, BODY)
-                .sendMailAsDraft()
-                .openDraftsFolder()
-                .verifyDraftFolderContent();
     }
 
-//    @Test (dependsOnMethods = "loginTest")
-//    public void createEmailTest() {
-//        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
-//
-//         mailPage.openMailBox()
-//                .createNewMail(RECEPIENT, SUBJECT, BODY)
-//                .sendMailAsDraft();
-//    }
+    @Test
+    public void sendEmailToDraftTest() {
+        Email expectedEmail = new Email();
+        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
+
+        loginPage.clickOnUsername(USERNAME);
+
+        Email actualEmail = mailPage
+                .openMailBox()
+                .createNewMail(expectedEmail)
+                .sendMailAsDraft()
+                .openDraftsFolder()
+                .getActualEmailFromList(expectedEmail);
+
+        Assert.assertEquals(actualEmail, expectedEmail);
+    }
+
+    @Test
+    public void sendEmailTest() {
+        Email expectedEmail = new Email();
+        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
+
+        loginPage.clickOnUsername(USERNAME);
+
+        Email actualEmail = mailPage
+                .openMailBox()
+                .createNewMail(expectedEmail)
+                .sendMail()
+                .openSendFolder()
+                .getActualEmailFromList(expectedEmail);
+
+        Assert.assertEquals(actualEmail, expectedEmail);
+    }
+
+    @Test
+    public void logoutTest() {
+
+        boolean isPasswordInputInteractable = loginPage
+                .clickOnUsername(USERNAME)
+                .clickOnLogoutLink()
+                .isPasswordInputInteractable();
+
+        Assert.assertTrue(isPasswordInputInteractable);
+
+    }
 
 }
