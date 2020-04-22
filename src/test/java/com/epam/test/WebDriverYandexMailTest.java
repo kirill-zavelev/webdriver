@@ -34,7 +34,6 @@ public class WebDriverYandexMailTest {
                 .submitLogin()
                 .typePassword(PASSWORD)
                 .submitPassword();
-
     }
 
     @AfterMethod(alwaysRun = true)
@@ -94,10 +93,8 @@ public class WebDriverYandexMailTest {
         boolean isPasswordInputInteractable = loginPage
                 .clickOnUsername(USERNAME)
                 .clickOnLogoutLink()
-                .isPasswordInputInteractable();
+                .isPasswordInputDisplayed();
 
         Assert.assertTrue(isPasswordInputInteractable);
-
     }
-
 }

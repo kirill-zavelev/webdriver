@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class SeleniumYandexMailPage extends AbstractPage {
 
-    private static final By MAIL_PAGE_LOCATOR = By.xpath("/html/body/div[4]/ul/ul/li[1]/a");
+    private static final By MAIL_PAGE_LOCATOR = By.xpath("//a[text()='Почта']");
     private static final By NEW_MAIL_LOCATOR = By.className("mail-ComposeButton-Text");
     private static final By SEND_TO_LOCATOR = By.xpath("(//div[@class='composeYabbles'])[1]");
     private static final By MAIL_SUBJECT_LOCATOR = By.name("subject");
@@ -44,11 +44,13 @@ public class SeleniumYandexMailPage extends AbstractPage {
 
     public SeleniumYandexMailPage sendMailAsDraft() {
         clickElementWhenItDisplayed(SAVE_MAIL_TO_DRAFT_LOCATOR);
+
         return this;
     }
 
     public SeleniumYandexMailPage sendMail() {
         clickElementWhenItDisplayed(SEND_EMAIL_BUTTON);
+
         return this;
     }
 
@@ -82,6 +84,4 @@ public class SeleniumYandexMailPage extends AbstractPage {
 
         return actualEmail;
     }
-
-
 }
