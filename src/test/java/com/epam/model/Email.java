@@ -13,8 +13,8 @@ public class Email {
     public Email() {
         Faker faker = new Faker();
         this.recipient = "kiri4by@gmail.com";
-        this.subject = faker.animal().name();
-        this.body = faker.commerce().department();
+        this.subject = faker.commerce().material();
+        this.body = faker.commerce().price();
     }
 
     public String getRecipient() {
@@ -54,5 +54,14 @@ public class Email {
     @Override
     public int hashCode() {
         return Objects.hash(recipient, subject, body);
+    }
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "recipient='" + recipient + '\'' +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                '}';
     }
 }

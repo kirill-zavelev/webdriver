@@ -1,12 +1,11 @@
 package com.epam.page;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.epam.model.Email;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractPage {
 
@@ -17,10 +16,11 @@ public abstract class AbstractPage {
     protected AbstractPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, TIME_OUT_IN_SECONDS);
+        driver.manage().timeouts().implicitlyWait(TIME_OUT_IN_SECONDS, TimeUnit.SECONDS);
     }
 
     protected WebElement waitForElementToBeClickable(By by) {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        return wait.until(ExpectedConditions.elementToBeClickable(by));
     }
 
     protected WebElement waitForVisibilityOf(By by) {
@@ -33,20 +33,50 @@ public abstract class AbstractPage {
     }
 
     protected void clickElementWhenItDisplayed(By by) {
-        driver.findElements(by).forEach(sendButton -> {
-            if (sendButton.isDisplayed()) {
-                sendButton.click();
+
+        try {
+            driver.findElements(by).forEach(button -> {
+                if (button.isDisplayed()) {
+                    button.click();
+                }
+            });
+        } catch (StaleElementReferenceException sere) {
+            clickElementWhenItDisplayed(by);
+        }
+
+    }
+
+    protected void sendKeysWhenInputInteractable(By by, String text) {
+        driver.findElements(by).forEach(input -> {
+            if (input.isDisplayed()) {
+                input.clear();
+                input.sendKeys(text);
             }
         });
     }
 
-    protected void checkInFirstEmailFromTheList() {
-        List<WebElement> hrefs = driver
-                .findElements(By.className("mail-MessageSnippet-Checkbox js-messages-item-checkbox-visual js-skip-click-message-item"));
+    protected WebElement findEmailPreview(By emailPreviewLocator, Email email) {
 
-        for (WebElement href : hrefs) {
-            href.click();
-            break;
+        try {
+
+            return driver.findElements(emailPreviewLocator)
+                    .stream()
+                    .filter(emailPreview -> emailPreview.getText().contains(email.getSubject())
+                            && emailPreview.getText().contains(email.getSubject())
+                            && emailPreview.getText().contains(email.getBody()))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("NSE!"));
+
+        } catch (StaleElementReferenceException sere) {
+
+            return driver.findElements(emailPreviewLocator)
+                    .stream()
+                    .filter(emailPreview -> emailPreview.getText().contains(email.getSubject())
+                            && emailPreview.getText().contains(email.getSubject())
+                            && emailPreview.getText().contains(email.getBody()))
+                    .findFirst()
+                    .orElseThrow(() -> new NoSuchElementException("NSE!"));
         }
     }
+
 }

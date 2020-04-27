@@ -11,6 +11,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.TimeUnit;
+
 public class WebDriverYandexMailTest {
 
     private static final String USERNAME = "buben.vika";
@@ -19,17 +21,22 @@ public class WebDriverYandexMailTest {
     private static final String BASE_URL = "http://passport.yandex.ru";
 
     private SeleniumYandexPassportLoginPage loginPage;
+    private SeleniumYandexMailPage mailPage;
     private WebDriver driver;
 
     @BeforeMethod(alwaysRun = true)
     public void setUpBrowser() {
+//        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-notifications");
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(10L, TimeUnit.SECONDS);
         driver.get(BASE_URL);
 
         loginPage = new SeleniumYandexPassportLoginPage(driver);
+        mailPage = new SeleniumYandexMailPage(driver);
+
         loginPage.typeUserName(USERNAME)
                 .submitLogin()
                 .typePassword(PASSWORD)
@@ -56,7 +63,6 @@ public class WebDriverYandexMailTest {
     @Test
     public void sendEmailToDraftTest() {
         Email expectedEmail = new Email();
-        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
 
         loginPage.clickOnUsername(USERNAME);
 
@@ -72,17 +78,51 @@ public class WebDriverYandexMailTest {
 
     @Test
     public void deleteEmailFromDraft() {
-        sendEmailToDraftTest();
-        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
-        mailPage
-                .checkInMail()
-                .deleteMail();
+
+        Email email = new Email();
+
+        loginPage.clickOnUsername(USERNAME);
+
+        boolean isEmailDeleted = mailPage
+                .openMailBox()
+                .createNewMail(email)
+                .sendMailAsDraft()
+                .openDraftsFolder()
+                .checkInEmail(email)
+                .clickDeleteEmail()
+                .isEmailDeleted(email);
+
+        Assert.assertTrue(isEmailDeleted);
+    }
+
+    @Test
+    public void updateEmailTest() {
+        for (int i = 0; i <= 10; i++) {
+
+        Email email = new Email();
+        Email expectedEmailToBeUpdated = new Email();
+
+        loginPage.clickOnUsername(USERNAME);
+
+        Email actualEmailToBeUpdated = mailPage
+                .openMailBox()
+                .createNewMail(email)
+                .sendMailAsDraft()
+                .openDraftsFolder()
+                .openEmail(email)
+                .updateEmail(expectedEmailToBeUpdated)
+                .sendMail()
+                .openSendFolder()
+                .getActualEmailFromList(expectedEmailToBeUpdated);
+
+        Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated);
+        }
+
     }
 
     @Test
     public void sendEmailTest() {
         Email expectedEmail = new Email();
-        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
 
         loginPage.clickOnUsername(USERNAME);
 

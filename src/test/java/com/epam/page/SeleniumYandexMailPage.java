@@ -5,20 +5,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.Iterator;
-import java.util.List;
-
 public class SeleniumYandexMailPage extends AbstractPage {
+
 
     private static final By MAIL_PAGE_LOCATOR = By.xpath("//a[text()='Почта']");
     private static final By NEW_MAIL_LOCATOR = By.className("mail-ComposeButton-Text");
-    private static final By SEND_TO_LOCATOR = By.xpath("(//div[@class='composeYabbles'])[1]");
+    private static final By SEND_TO_LOCATOR = By.xpath("//div[@is='x-bubbles']");
     private static final By MAIL_SUBJECT_LOCATOR = By.name("subject");
-    private static final By MAIL_BODY_LOCATOR = By.xpath("//*[@id='cke_1_contents']/div");
+    private static final By MAIL_BODY_LOCATOR = By.xpath("//div[@role='textbox']");
     private static final By SAVE_MAIL_TO_DRAFT_LOCATOR = By.xpath("//button[@class='controlButtons__btn controlButtons__btn--close']");
-    private static final By DELETE_MAIL_FROM_DRAFT_BUTTON = By.xpath("//span[text()='Удалить']");
+    private static final By DELETE_EMAIL_BUTTON = By.xpath("//span[text()='Удалить']");
     private static final By MAIL_FOOTER_LOCATOR = By.xpath("//a[@id='cke_37']");
     private static final By SEND_EMAIL_BUTTON = By.xpath("//button[contains(@class, 'ComposeControlPanelButton-Button_action')]");
+
+    private static final By EMAIL_PREVIEW_LOCATOR = By.xpath("//div[@data-key='box=messages-item-box']");
+    private static final By EMAIL_CHECK_MARK = By.cssSelector("label rect");
 
     private static final By DRAFT_FOLDER_LOCATOR = By.xpath("//a[@data-title='Черновики']");
     private static final By SEND_FOLDER_LOCATOR = By.xpath("//a[@data-title='Отправленные']");
@@ -39,10 +40,7 @@ public class SeleniumYandexMailPage extends AbstractPage {
     public SeleniumYandexMailPage createNewMail(Email email) {
         waitForElementToBeClickable(NEW_MAIL_LOCATOR).click();
         waitForElementToBeClickable(MAIL_FOOTER_LOCATOR);
-
-        driver.findElement(SEND_TO_LOCATOR).sendKeys(email.getRecipient());
-        driver.findElement(MAIL_SUBJECT_LOCATOR).sendKeys(email.getSubject());
-        driver.findElement(MAIL_BODY_LOCATOR).sendKeys(email.getBody());
+        fulfillEmail(email);
 
         return this;
     }
@@ -81,7 +79,9 @@ public class SeleniumYandexMailPage extends AbstractPage {
         mailBodyNameLocator = getBaseSpanTextLocator(email.getBody());
 
         waitForElementToBeClickable(DRAFT_FOLDER_LOCATOR);
+        waitForVisibilityOf(mailRecipientNameLocator);
         waitForVisibilityOf(mailSubjectNameLocator);
+        waitForVisibilityOf(mailBodyNameLocator);
 
         actualEmail.setRecipient(driver.findElement(mailRecipientNameLocator).getText());
         actualEmail.setSubject(driver.findElement(mailSubjectNameLocator).getText());
@@ -90,15 +90,50 @@ public class SeleniumYandexMailPage extends AbstractPage {
         return actualEmail;
     }
 
-    public SeleniumYandexMailPage checkInMail() {
-        checkInFirstEmailFromTheList();
+    public SeleniumYandexMailPage checkInEmail(Email email) {
+        WebElement checkMark = findEmailPreview(EMAIL_PREVIEW_LOCATOR, email).findElement(EMAIL_CHECK_MARK);
+        waitForElementToBeClickable(EMAIL_CHECK_MARK);
+        checkMark.click();
 
         return this;
     }
 
-    public SeleniumYandexMailPage deleteMail() {
-        clickElementWhenItDisplayed(DELETE_MAIL_FROM_DRAFT_BUTTON);
+    public SeleniumYandexMailPage clickDeleteEmail() {
+        waitForElementToBeClickable(DELETE_EMAIL_BUTTON);
+        driver.findElement(DELETE_EMAIL_BUTTON).click();
 
         return this;
+    }
+
+    public boolean isEmailDeleted(Email email) {
+        return driver.findElements(EMAIL_PREVIEW_LOCATOR)
+                .stream()
+                .noneMatch(emailPreview -> !emailPreview.getText().contains(email.getBody()) &&
+                        !emailPreview.getText().contains(email.getRecipient()) &&
+                        !emailPreview.getText().contains(email.getSubject()));
+
+    }
+
+    public SeleniumYandexMailPage openEmail(Email email) {
+        waitForElementToBeClickable(DRAFT_FOLDER_LOCATOR);
+        findEmailPreview(EMAIL_PREVIEW_LOCATOR, email).click();
+
+        return this;
+    }
+
+    public SeleniumYandexMailPage updateEmail(Email email) {
+        fulfillEmail(email);
+
+        return this;
+    }
+
+    private void fulfillEmail(Email email) {
+        waitForElementToBeClickable(SEND_TO_LOCATOR);
+        waitForElementToBeClickable(MAIL_SUBJECT_LOCATOR);
+        waitForElementToBeClickable(MAIL_BODY_LOCATOR);
+
+        sendKeysWhenInputInteractable(SEND_TO_LOCATOR, email.getRecipient());
+        sendKeysWhenInputInteractable(MAIL_SUBJECT_LOCATOR, email.getSubject());
+        sendKeysWhenInputInteractable(MAIL_BODY_LOCATOR, email.getBody());
     }
 }
