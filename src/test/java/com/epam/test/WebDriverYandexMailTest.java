@@ -71,6 +71,15 @@ public class WebDriverYandexMailTest {
     }
 
     @Test
+    public void deleteEmailFromDraft() {
+        sendEmailToDraftTest();
+        SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);
+        mailPage
+                .checkInMail()
+                .deleteMail();
+    }
+
+    @Test
     public void sendEmailTest() {
         Email expectedEmail = new Email();
         SeleniumYandexMailPage mailPage = new SeleniumYandexMailPage(driver);

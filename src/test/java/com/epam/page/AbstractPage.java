@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public abstract class AbstractPage {
 
     private static final int TIME_OUT_IN_SECONDS = 10;
@@ -36,5 +38,15 @@ public abstract class AbstractPage {
                 sendButton.click();
             }
         });
+    }
+
+    protected void checkInFirstEmailFromTheList() {
+        List<WebElement> hrefs = driver
+                .findElements(By.className("mail-MessageSnippet-Checkbox js-messages-item-checkbox-visual js-skip-click-message-item"));
+
+        for (WebElement href : hrefs) {
+            href.click();
+            break;
+        }
     }
 }

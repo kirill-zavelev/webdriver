@@ -3,6 +3,10 @@ package com.epam.page;
 import com.epam.model.Email;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class SeleniumYandexMailPage extends AbstractPage {
 
@@ -12,6 +16,7 @@ public class SeleniumYandexMailPage extends AbstractPage {
     private static final By MAIL_SUBJECT_LOCATOR = By.name("subject");
     private static final By MAIL_BODY_LOCATOR = By.xpath("//*[@id='cke_1_contents']/div");
     private static final By SAVE_MAIL_TO_DRAFT_LOCATOR = By.xpath("//button[@class='controlButtons__btn controlButtons__btn--close']");
+    private static final By DELETE_MAIL_FROM_DRAFT_BUTTON = By.xpath("//span[text()='Удалить']");
     private static final By MAIL_FOOTER_LOCATOR = By.xpath("//a[@id='cke_37']");
     private static final By SEND_EMAIL_BUTTON = By.xpath("//button[contains(@class, 'ComposeControlPanelButton-Button_action')]");
 
@@ -83,5 +88,17 @@ public class SeleniumYandexMailPage extends AbstractPage {
         actualEmail.setBody(driver.findElement(mailBodyNameLocator).getText());
 
         return actualEmail;
+    }
+
+    public SeleniumYandexMailPage checkInMail() {
+        checkInFirstEmailFromTheList();
+
+        return this;
+    }
+
+    public SeleniumYandexMailPage deleteMail() {
+        clickElementWhenItDisplayed(DELETE_MAIL_FROM_DRAFT_BUTTON);
+
+        return this;
     }
 }
