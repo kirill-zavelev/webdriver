@@ -26,7 +26,7 @@ public class WebDriverYandexMailTest {
 
     @BeforeMethod(alwaysRun = true)
     public void setUpBrowser() {
-//        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-notifications");
         driver = new ChromeDriver(options);
@@ -35,7 +35,6 @@ public class WebDriverYandexMailTest {
         driver.get(BASE_URL);
 
         loginPage = new SeleniumYandexPassportLoginPage(driver);
-        mailPage = new SeleniumYandexMailPage(driver);
 
         loginPage.typeUserName(USERNAME)
                 .submitLogin()
@@ -82,6 +81,7 @@ public class WebDriverYandexMailTest {
         Email email = new Email();
 
         loginPage.clickOnUsername(USERNAME);
+        mailPage = new SeleniumYandexMailPage(driver);
 
         boolean isEmailDeleted = mailPage
                 .openMailBox()
@@ -97,12 +97,11 @@ public class WebDriverYandexMailTest {
 
     @Test
     public void updateEmailTest() {
-        for (int i = 0; i <= 10; i++) {
-
         Email email = new Email();
         Email expectedEmailToBeUpdated = new Email();
 
         loginPage.clickOnUsername(USERNAME);
+        mailPage = new SeleniumYandexMailPage(driver);
 
         Email actualEmailToBeUpdated = mailPage
                 .openMailBox()
@@ -116,13 +115,13 @@ public class WebDriverYandexMailTest {
                 .getActualEmailFromList(expectedEmailToBeUpdated);
 
         Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated);
-        }
 
     }
 
     @Test
     public void sendEmailTest() {
         Email expectedEmail = new Email();
+        mailPage = new SeleniumYandexMailPage(driver);
 
         loginPage.clickOnUsername(USERNAME);
 

@@ -30,7 +30,7 @@ public class SeleniumYandexPassportLoginPage extends AbstractPage {
     }
 
     public SeleniumYandexPassportLoginPage typePassword(String password) {
-        waitForElementToBeClickable(PASSWORD_LOCATOR);
+        waitForElementToBeClickable(driver.findElement(PASSWORD_LOCATOR));
         driver.findElement(PASSWORD_LOCATOR).sendKeys(password);
 
         return this;
@@ -44,8 +44,13 @@ public class SeleniumYandexPassportLoginPage extends AbstractPage {
 
     public SeleniumYandexPassportLoginPage clickOnUsername(String username) {
         By usernameLocator = getBaseSpanTextLocator(username);
-        waitForElementToBeClickable(usernameLocator);
-        driver.findElement(usernameLocator).click();
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+                e.printStackTrace();
+        }
+        waitForElementToBeClickable(driver.findElement(usernameLocator)).click();
+//        driver.findElement(usernameLocator).click();
 
         return this;
     }
@@ -57,7 +62,7 @@ public class SeleniumYandexPassportLoginPage extends AbstractPage {
     }
 
     public SeleniumYandexPassportLoginPage clickOnLogoutLink() {
-        clickElementWhenItDisplayed(LOGOUT_LINK);
+        clickElementWhenItDisplayed(driver.findElements(LOGOUT_LINK));
 
         return this;
     }
