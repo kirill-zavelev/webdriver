@@ -1,4 +1,4 @@
-package com.epam.model;
+package com.epam.webdriver.model;
 
 import com.github.javafaker.Faker;
 
@@ -15,30 +15,6 @@ public class Email {
         this.recipient = "kiri4by@gmail.com";
         this.subject = faker.commerce().material();
         this.body = faker.commerce().price();
-    }
-
-    public String getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     @Override
@@ -63,5 +39,29 @@ public class Email {
                 ", subject='" + subject + '\'' +
                 ", body='" + body + '\'' +
                 '}';
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 }
