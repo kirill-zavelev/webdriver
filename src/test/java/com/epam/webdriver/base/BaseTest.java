@@ -40,7 +40,8 @@ public class BaseTest {
         loginPage.setUserName(USERNAME)
                 .clickLogin()
                 .setPassword(PASSWORD)
-                .clickPassword();
+                .clickPassword()
+                .clickOnUsername();
     }
 
     @AfterMethod(alwaysRun = true)

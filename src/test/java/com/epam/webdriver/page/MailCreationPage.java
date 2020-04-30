@@ -10,14 +10,6 @@ import java.util.List;
 
 public class MailCreationPage extends AbstractPage {
 
-//    private static final By NEW_MAIL = By.className("mail-ComposeButton-Text");
-//    private static final By MAIL_FOOTER = By.className("composeReact__footer");
-//    private static final By SEND_TO = By.xpath("//div[@is='x-bubbles']");
-//    private static final By MAIL_SUBJECT = By.name("subject");
-//    private static final By MAIL_BODY = By.xpath("//div[@role='textbox']");
-//    private static final By SAVE_MAIL_TO_DRAFT = By.xpath("//button[contains(@class, 'btn--close')]");
-//    private static final By SEND_EMAIL = By.xpath("//button[contains(@class, 'Button_action')]");
-
     @FindBy(className = "mail-ComposeButton-Text")
     private WebElement newMail;
 
