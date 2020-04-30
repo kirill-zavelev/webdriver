@@ -82,7 +82,6 @@ public class InboxPage extends AbstractPage {
     }
 
 
-
     public Email getActualEmailFromList(Email email) {
         Email actualEmail = new Email();
         WebElement emailPreview = findEmailPreview(emailPreviews, email);

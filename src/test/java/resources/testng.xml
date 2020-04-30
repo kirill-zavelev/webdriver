@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="MailSuite" verbose="1">
-<test name="MailTest">
-<classes>
-<class name="com.epam.webdriver.test.MailTest"/>
-</classes>
-</test>
+    <test name="MailTest">
+        <classes>
+            <class name="com.epam.webdriver.test.MailTest"/>
+        </classes>
+    </test>
 </suite>

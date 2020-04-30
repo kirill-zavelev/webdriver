@@ -42,7 +42,7 @@ public class MailTest extends BaseTest {
         inboxPage.openMailBox();
 
         mailCreationPage.createNewMail(email)
-            .sendMailAsDraft();
+                .sendMailAsDraft();
 
         inboxPage.openDraftsFolder()
                 .checkInEmail(email);
@@ -63,16 +63,16 @@ public class MailTest extends BaseTest {
         inboxPage.openMailBox();
 
         mailCreationPage.createNewMail(email)
-            .sendMailAsDraft();
+                .sendMailAsDraft();
 
         inboxPage.openDraftsFolder()
-            .openEmail(email);
+                .openEmail(email);
 
         mailCreationPage.updateEmail(expectedEmailToBeUpdated)
-            .sendMail();
+                .sendMail();
 
         Email actualEmailToBeUpdated = inboxPage.openSendFolder()
-            .getActualEmailFromList(expectedEmailToBeUpdated);
+                .getActualEmailFromList(expectedEmailToBeUpdated);
 
         //Verify that email was updated
         Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated);
@@ -85,10 +85,10 @@ public class MailTest extends BaseTest {
         inboxPage.openMailBox();
 
         mailCreationPage.createNewMail(expectedEmail)
-            .sendMail();
+                .sendMail();
 
         Email actualEmail = inboxPage.openSendFolder()
-            .getActualEmailFromList(expectedEmail);
+                .getActualEmailFromList(expectedEmail);
 
         //Verify that email with correct fields was sent
         Assert.assertEquals(actualEmail, expectedEmail);
