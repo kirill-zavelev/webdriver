@@ -10,8 +10,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import java.util.concurrent.TimeUnit;
-
 public class BaseTest {
 
     protected static final String USERNAME = PropertyLoader.loadProperty("user.name");
@@ -32,7 +30,6 @@ public class BaseTest {
         options.addArguments("--disable-notifications");
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10L, TimeUnit.SECONDS);
         driver.get(BASE_URL);
 
         loginPage = new LoginPage(driver);
