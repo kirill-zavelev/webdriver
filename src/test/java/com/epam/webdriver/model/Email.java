@@ -1,5 +1,6 @@
 package com.epam.webdriver.model;
 
+import com.epam.webdriver.propertyloader.PropertyLoader;
 import com.github.javafaker.Faker;
 
 import java.util.Objects;
@@ -12,7 +13,7 @@ public class Email {
 
     public Email() {
         Faker faker = new Faker();
-        this.recipient = "kiri4by@gmail.com";
+        this.recipient = PropertyLoader.loadProperty("user.send.to");
         this.subject = faker.commerce().material();
         this.body = faker.commerce().price();
     }

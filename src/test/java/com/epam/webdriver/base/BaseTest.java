@@ -3,6 +3,7 @@ package com.epam.webdriver.base;
 import com.epam.webdriver.page.InboxPage;
 import com.epam.webdriver.page.LoginPage;
 import com.epam.webdriver.page.MailCreationPage;
+import com.epam.webdriver.propertyloader.PropertyLoader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,10 +14,10 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
 
-    protected static final String USERNAME = "buben.vika";
-    protected static final String PASSWORD = "55555555vika";
-    protected static final String EMAIL = "buben.vika@yandex.by";
-    protected static final String BASE_URL = "http://passport.yandex.ru";
+    protected static final String USERNAME = PropertyLoader.loadProperty("user.name");
+    protected static final String PASSWORD = PropertyLoader.loadProperty("user.password");
+    protected static final String EMAIL = PropertyLoader.loadProperty("user.send.from");
+    protected static final String BASE_URL = PropertyLoader.loadProperty("base.url");
 
     protected LoginPage loginPage;
     protected InboxPage inboxPage;
@@ -26,6 +27,7 @@ public class BaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void setUpBrowser() {
+        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-notifications");
         driver = new ChromeDriver(options);
