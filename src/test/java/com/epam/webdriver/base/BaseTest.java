@@ -4,11 +4,18 @@ import com.epam.webdriver.page.InboxPage;
 import com.epam.webdriver.page.LoginPage;
 import com.epam.webdriver.page.MailCreationPage;
 import com.epam.webdriver.propertyloader.PropertyLoader;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.annotations.*;
+
+import javax.sound.sampled.Port;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class BaseTest {
 
@@ -23,27 +30,44 @@ public class BaseTest {
 
     protected WebDriver driver;
 
-    @BeforeMethod(alwaysRun = true)
-    public void setUpBrowser() {
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
+    @BeforeClass(alwaysRun = true)
+    public void setUpBrowser() throws MalformedURLException {
+
         ChromeOptions options = new ChromeOptions();
+
         options.addArguments("--disable-notifications");
-        driver = new ChromeDriver(options);
+        driver = new RemoteWebDriver(new URL("http://192.168.100.15:4444/wd/hub"), options);
+
         driver.manage().window().maximize();
         driver.get(BASE_URL);
 
         loginPage = new LoginPage(driver);
-        inboxPage = new InboxPage(driver);
         mailCreationPage = new MailCreationPage(driver);
 
-        loginPage.setUserName(USERNAME)
-                .clickLogin()
-                .setPassword(PASSWORD)
-                .clickPassword()
-                .clickOnUsername();
+        inboxPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
     }
 
-    @AfterMethod(alwaysRun = true)
+//    @BeforeMethod(alwaysRun = true)
+//    public void setUpBrowser() throws MalformedURLException {
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--disable-notifications");
+//        driver = new RemoteWebDriver(new URL("http://192.168.100.15:4444/wd/hub"), options);
+//
+//        driver.manage().window().maximize();
+//        driver.get(BASE_URL);
+//
+//        loginPage = new LoginPage(driver);
+//        inboxPage = new InboxPage(driver);
+//        mailCreationPage = new MailCreationPage(driver);
+//
+//        loginPage.setUserName(USERNAME)
+//                .clickLogin()
+//                .setPassword(PASSWORD)
+//                .clickPassword()
+//                .clickOnUsername();
+//    }
+
+    @AfterClass(alwaysRun = true)
     public void tearDownBrowser() {
         driver.close();
         driver = null;

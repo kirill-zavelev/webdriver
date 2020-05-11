@@ -10,11 +10,11 @@ public class MailTest extends BaseTest {
     @Test
     public void loginTest() {
 
-        String actualEmail = loginPage
+        String actualEmail = inboxPage
                 .getActualEmail();
 
         //Verify that correct email is displayed after login
-        Assert.assertEquals(actualEmail, EMAIL);
+        Assert.assertEquals(actualEmail, EMAIL, "");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class MailTest extends BaseTest {
                 .sendMailAsDraft();
 
         inboxPage.openDraftsFolder()
-                .checkInEmail(email);
+                .checkEmailCheckbox(email);
 
         boolean isEmailDeleted = inboxPage.clickDeleteEmail()
                 .isEmailDeleted(email);
@@ -68,7 +68,7 @@ public class MailTest extends BaseTest {
         inboxPage.openDraftsFolder()
                 .openEmail(email);
 
-        mailCreationPage.updateEmail(expectedEmailToBeUpdated)
+        mailCreationPage.fillEmail(expectedEmailToBeUpdated)
                 .sendMail();
 
         Email actualEmailToBeUpdated = inboxPage.openSendFolder()

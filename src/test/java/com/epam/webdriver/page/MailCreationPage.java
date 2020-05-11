@@ -11,7 +11,7 @@ import java.util.List;
 public class MailCreationPage extends AbstractPage {
 
     @FindBy(className = "mail-ComposeButton-Text")
-    private WebElement newMail;
+    private WebElement newMailBtn;
 
     @FindBy(className = "composeReact__footer")
     private WebElement mailFooter;
@@ -26,10 +26,10 @@ public class MailCreationPage extends AbstractPage {
     private WebElement mailBody;
 
     @FindBy(xpath = "//button[contains(@class, 'btn--close')]")
-    private List<WebElement> saveMailToDraft;
+    private List<WebElement> saveMailToDraftBtn;
 
     @FindBy(xpath = "//button[contains(@class, 'Button_action')]")
-    private List<WebElement> sendEmail;
+    private List<WebElement> sendEmailBtn;
 
     public MailCreationPage(WebDriver driver) {
         super(driver);
@@ -37,37 +37,34 @@ public class MailCreationPage extends AbstractPage {
     }
 
     public MailCreationPage createNewMail(Email email) {
-        waitForElementToBeClickable(newMail).click();
+        waitForElementToBeClickable(newMailBtn).click();
         waitForElementToBeClickable(mailFooter);
-        fulfillEmail(email);
+        fillEmail(email);
 
         return this;
     }
 
-    private void fulfillEmail(Email email) {
+    public MailCreationPage fillEmail(Email email) {
         waitForElementToBeClickable(sendTo);
+        sendKeysWhenInputIntractable(sendTo, email.getRecipient());
+
         waitForElementToBeClickable(mailSubject);
+        sendKeysWhenInputIntractable(mailSubject, email.getSubject());
+
         waitForElementToBeClickable(mailBody);
-
-        sendKeysWhenInputInteractable(sendTo, email.getRecipient());
-        sendKeysWhenInputInteractable(mailSubject, email.getSubject());
-        sendKeysWhenInputInteractable(mailBody, email.getBody());
-    }
-
-    public MailCreationPage updateEmail(Email email) {
-        fulfillEmail(email);
+        sendKeysWhenInputIntractable(mailBody, email.getBody());
 
         return this;
     }
 
     public MailCreationPage sendMailAsDraft() {
-        clickElementWhenItDisplayed(saveMailToDraft);
+        clickElementWhenItDisplayed(saveMailToDraftBtn);
 
         return this;
     }
 
     public MailCreationPage sendMail() {
-        clickElementWhenItDisplayed(sendEmail);
+        clickElementWhenItDisplayed(sendEmailBtn);
 
         return this;
     }

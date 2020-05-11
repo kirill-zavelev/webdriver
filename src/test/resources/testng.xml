@@ -3,7 +3,7 @@
 <suite name="MailSuite" verbose="1">
     <test name="MailTest">
         <classes>
-            <class name="com.epam.test.WebDriverYandexMailTest"/>
+            <class name="com.epam.webdriver.test.MailTest"/>
         </classes>
     </test>
 </suite>

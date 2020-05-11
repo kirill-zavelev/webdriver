@@ -1,10 +1,9 @@
 package com.epam.webdriver.page;
 
 import com.epam.webdriver.model.Email;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,10 +16,13 @@ public abstract class AbstractPage {
 
     protected final WebDriver driver;
     protected final WebDriverWait wait;
+    protected final JavascriptExecutor jsExecutor;
 
     protected AbstractPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, TIME_OUT_IN_SECONDS);
+        this.jsExecutor = (JavascriptExecutor) driver;
+//        PageFactory.initElements(driver, this);
         driver.manage().timeouts().implicitlyWait(TIME_OUT_IN_SECONDS, TimeUnit.SECONDS);
     }
 
@@ -42,7 +44,7 @@ public abstract class AbstractPage {
 
     }
 
-    protected void sendKeysWhenInputInteractable(WebElement element, String text) {
+    protected void sendKeysWhenInputIntractable(WebElement element, String text) {
         if (element.isDisplayed()) {
             element.clear();
             element.sendKeys(text);
@@ -59,6 +61,16 @@ public abstract class AbstractPage {
                         && emailPreview.getText().contains(email.getBody()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("NSE!"));
+    }
+
+    protected void highLightText(WebElement element) {
+        jsExecutor.executeScript
+                ("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
+    }
+
+    public void callContextMenu(WebElement element) {
+        Actions actions = new Actions(driver);
+        actions.contextClick(element).perform();
     }
 
 }
