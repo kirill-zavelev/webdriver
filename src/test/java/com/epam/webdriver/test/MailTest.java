@@ -2,6 +2,7 @@ package com.epam.webdriver.test;
 
 import com.epam.webdriver.base.BaseTest;
 import com.epam.webdriver.model.Email;
+import com.epam.webdriver.page.DraftsPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -65,7 +66,9 @@ public class MailTest extends BaseTest {
         mailCreationPage.createNewMail(email)
                 .sendMailAsDraft();
 
-        inboxPage.openDraftsFolder()
+        inboxPage.openDraftsFolder();
+
+        new DraftsPage(driver)
                 .openEmail(email);
 
         mailCreationPage.fillEmail(expectedEmailToBeUpdated)

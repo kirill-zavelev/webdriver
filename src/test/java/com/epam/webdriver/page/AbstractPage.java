@@ -22,8 +22,8 @@ public abstract class AbstractPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, TIME_OUT_IN_SECONDS);
         this.jsExecutor = (JavascriptExecutor) driver;
-//        PageFactory.initElements(driver, this);
         driver.manage().timeouts().implicitlyWait(TIME_OUT_IN_SECONDS, TimeUnit.SECONDS);
+        PageFactory.initElements(driver, this);
     }
 
     protected WebElement waitForElementToBeClickable(WebElement element) {

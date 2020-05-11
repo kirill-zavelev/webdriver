@@ -6,7 +6,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
@@ -33,6 +32,9 @@ public class InboxPage extends AbstractPage {
     @FindBy(className = "user-account__subname")
     private WebElement loggedUserEmail;
 
+    @FindBy(className = "user-account__name")
+    private WebElement loggedUsername;
+
     private static final By RECIPIENT = By.className("js-message-snippet-sender");
     private static final By SUBJECT = By.className("mail-MessageSnippet-Item_subject");
     private static final By EMAIL_BODY = By.className("js-message-snippet-firstline");
@@ -44,17 +46,16 @@ public class InboxPage extends AbstractPage {
     public InboxPage clickOnUsername() {
 
         try {
-            loggedUserEmail.click();
+            loggedUsername.click();
         } catch (StaleElementReferenceException sere) {
             driver.navigate().refresh();
-            loggedUserEmail.click();
+            loggedUsername.click();
         }
 
         return this;
     }
 
     public String getActualEmail() {
-
         return loggedUserEmail.getText();
     }
 
