@@ -33,7 +33,7 @@ public class MailCreationPage extends AbstractPage {
 
     public MailCreationPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
+//        PageFactory.initElements(driver, this);
     }
 
     public MailCreationPage createNewMail(Email email) {

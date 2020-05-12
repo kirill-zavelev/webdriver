@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="MailSuite" verbose="1">
-    <test name="MailTest">
+<suite name="MailSuite" thread-count="2" parallel="tests" verbose="1">
+    <test name="TestNG1">
+        <parameter name="browser" value="chrome"/>
+        <parameter name="port" value="9696"/>
+        <classes>
+            <class name="com.epam.webdriver.test.MailTest"/>
+        </classes>
+    </test>
+
+    <test name="TestNG2">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="port" value="9797"/>
         <classes>
             <class name="com.epam.webdriver.test.MailTest"/>
         </classes>

@@ -2,7 +2,6 @@ package com.epam.webdriver.test;
 
 import com.epam.webdriver.base.BaseTest;
 import com.epam.webdriver.model.Email;
-import com.epam.webdriver.page.DraftsPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -14,8 +13,7 @@ public class MailTest extends BaseTest {
         String actualEmail = inboxPage
                 .getActualEmail();
 
-        //Verify that correct email is displayed after login
-        Assert.assertEquals(actualEmail, EMAIL, "");
+        Assert.assertEquals(actualEmail, EMAIL, "Incorrect email is displayed.");
     }
 
     @Test
@@ -31,8 +29,7 @@ public class MailTest extends BaseTest {
         Email actualEmail = inboxPage.openDraftsFolder()
                 .getActualEmailFromList(expectedEmail);
 
-        //Verify that recipient, subject and body are correct
-        Assert.assertEquals(actualEmail, expectedEmail);
+        Assert.assertEquals(actualEmail, expectedEmail, "Incorrect email data. Please mail parameters.");
     }
 
     @Test
@@ -51,8 +48,7 @@ public class MailTest extends BaseTest {
         boolean isEmailDeleted = inboxPage.clickDeleteEmail()
                 .isEmailDeleted(email);
 
-        //Verify that email was deleted from list
-        Assert.assertTrue(isEmailDeleted);
+        Assert.assertTrue(isEmailDeleted, "Email was not deleted from inbox.");
     }
 
     @Test
@@ -66,9 +62,7 @@ public class MailTest extends BaseTest {
         mailCreationPage.createNewMail(email)
                 .sendMailAsDraft();
 
-        inboxPage.openDraftsFolder();
-
-        new DraftsPage(driver)
+        inboxPage.openDraftsFolder()
                 .openEmail(email);
 
         mailCreationPage.fillEmail(expectedEmailToBeUpdated)
@@ -77,8 +71,7 @@ public class MailTest extends BaseTest {
         Email actualEmailToBeUpdated = inboxPage.openSendFolder()
                 .getActualEmailFromList(expectedEmailToBeUpdated);
 
-        //Verify that email was updated
-        Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated);
+        Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated, "Email was not updated.");
     }
 
     @Test
@@ -93,8 +86,7 @@ public class MailTest extends BaseTest {
         Email actualEmail = inboxPage.openSendFolder()
                 .getActualEmailFromList(expectedEmail);
 
-        //Verify that email with correct fields was sent
-        Assert.assertEquals(actualEmail, expectedEmail);
+        Assert.assertEquals(actualEmail, expectedEmail, "Expected email does not exist in the list.");
     }
 
     @Test
@@ -104,7 +96,6 @@ public class MailTest extends BaseTest {
                 .clickOnLogoutLink()
                 .isPasswordInputDisplayed();
 
-        //Verify that user was logged out
-        Assert.assertTrue(isPasswordInputInteractable);
+        Assert.assertTrue(isPasswordInputInteractable, "User was not logged out.");
     }
 }

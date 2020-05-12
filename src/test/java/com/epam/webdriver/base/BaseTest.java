@@ -30,22 +30,35 @@ public class BaseTest {
 
     protected WebDriver driver;
 
-    @BeforeClass(alwaysRun = true)
-    public void setUpBrowser() throws MalformedURLException {
-
-        ChromeOptions options = new ChromeOptions();
-
-        options.addArguments("--disable-notifications");
-        driver = new RemoteWebDriver(new URL("http://192.168.100.15:4444/wd/hub"), options);
-
+    @Parameters({"browser", "port"})
+    @BeforeMethod
+    public void setUpBrowser(String browser, String port) throws MalformedURLException {
+        DesiredCapabilities capability = new DesiredCapabilities();
+        capability.setBrowserName(browser);
+        driver = new RemoteWebDriver(new URL("http://192.168.100.15:".concat(port).concat("/wd/hub")), capability);
         driver.manage().window().maximize();
         driver.get(BASE_URL);
-
         loginPage = new LoginPage(driver);
         mailCreationPage = new MailCreationPage(driver);
-
         inboxPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
+
     }
+//    @BeforeMethod(alwaysRun = true)
+//    public void setUpBrowser() throws MalformedURLException {
+//
+//        ChromeOptions options = new ChromeOptions();
+//
+//        options.addArguments("--disable-notifications");
+//        driver = new RemoteWebDriver(new URL("http://192.168.100.15:4444/wd/hub"), options);
+//
+//        driver.manage().window().maximize();
+//        driver.get(BASE_URL);
+//
+//        loginPage = new LoginPage(driver);
+//        mailCreationPage = new MailCreationPage(driver);
+//
+//        inboxPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
+//    }
 
 //    @BeforeMethod(alwaysRun = true)
 //    public void setUpBrowser() throws MalformedURLException {
@@ -67,7 +80,7 @@ public class BaseTest {
 //                .clickOnUsername();
 //    }
 
-    @AfterClass(alwaysRun = true)
+    @AfterMethod(alwaysRun = true)
     public void tearDownBrowser() {
         driver.close();
         driver = null;
