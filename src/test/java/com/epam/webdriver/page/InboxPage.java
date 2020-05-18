@@ -5,14 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
 public class InboxPage extends AbstractPage {
-
-    @FindBy(xpath = "//a[text()='Почта']")
-    private WebElement mailPage;
 
     @FindBy(xpath = "//*[@data-id='2']")
     private WebElement deleteEmailBtn;
@@ -29,11 +27,14 @@ public class InboxPage extends AbstractPage {
     @FindBy(xpath = "//div[@data-key='box=messages-item-box']")
     private List<WebElement> emailPreviews;
 
-    @FindBy(className = "user-account__subname")
-    private WebElement loggedUserEmail;
-
     @FindBy(className = "user-account__name")
     private WebElement loggedUsername;
+
+    @FindBy(className = "mail-ComposeButton-Text")
+    private WebElement newMailBtn;
+
+    @FindBy(className = "composeReact__footer")
+    private WebElement mailFooter;
 
     private static final By RECIPIENT = By.className("js-message-snippet-sender");
     private static final By SUBJECT = By.className("mail-MessageSnippet-Item_subject");
@@ -55,18 +56,6 @@ public class InboxPage extends AbstractPage {
         return this;
     }
 
-    public String getActualEmail() {
-        return loggedUserEmail.getText();
-    }
-
-    public InboxPage openMailBox() {
-        waitForElementToBeClickable(mailPage).click();
-//        waitForElementToBeClickable(mailPage);
-//        new Actions(driver).clickAndHold(mailPage).build().perform();
-
-        return this;
-    }
-
     public InboxPage openDraftsFolder() {
         waitForElementToBeClickable(draftFolderBtn);
         draftFolderBtn.click();
@@ -77,6 +66,13 @@ public class InboxPage extends AbstractPage {
     public InboxPage openSendFolder() {
         waitForElementToBeClickable(sendFolderBtn);
         sendFolderBtn.click();
+
+        return this;
+    }
+
+    public InboxPage openMailCreationForm() {
+        waitForElementToBeClickable(newMailBtn).click();
+        waitForElementToBeClickable(mailFooter);
 
         return this;
     }
@@ -104,7 +100,6 @@ public class InboxPage extends AbstractPage {
         return this;
     }
 
-
     public Email getActualEmailFromList(Email email) {
         Email actualEmail = new Email();
         WebElement emailPreview = findEmailPreview(emailPreviews, email);
@@ -115,7 +110,6 @@ public class InboxPage extends AbstractPage {
 
         return actualEmail;
     }
-
 
     public boolean isEmailDeleted(Email email) {
         return emailPreviews

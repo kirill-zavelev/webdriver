@@ -1,22 +1,16 @@
 package com.epam.webdriver.base;
 
+import com.epam.webdriver.driver.DriverSingleton;
 import com.epam.webdriver.page.InboxPage;
 import com.epam.webdriver.page.LoginPage;
 import com.epam.webdriver.page.MailCreationPage;
-import com.epam.webdriver.propertyloader.PropertyLoader;
-import org.openqa.selenium.Platform;
+import com.epam.webdriver.page.QuickActionsPanelPage;
+import com.epam.webdriver.utils.PropertyLoader;
+import com.epam.webdriver.utils.TestListener;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.*;
 
-import javax.sound.sampled.Port;
-import java.net.MalformedURLException;
-import java.net.URL;
-
+@Listeners({TestListener.class})
 public class BaseTest {
 
     protected static final String USERNAME = PropertyLoader.loadProperty("user.name");
@@ -27,49 +21,24 @@ public class BaseTest {
     protected LoginPage loginPage;
     protected InboxPage inboxPage;
     protected MailCreationPage mailCreationPage;
+    protected QuickActionsPanelPage quickActionsPanelPage;
 
     protected WebDriver driver;
 
-    @BeforeClass(alwaysRun = true)
-    public void setUpBrowser() throws MalformedURLException {
-
-        ChromeOptions options = new ChromeOptions();
-
-        options.addArguments("--disable-notifications");
-        driver = new RemoteWebDriver(new URL("http://192.168.100.15:4444/wd/hub"), options);
-
-        driver.manage().window().maximize();
+    @BeforeMethod
+    public void setUpBrowser() {
+        driver = DriverSingleton.getDriver();
         driver.get(BASE_URL);
 
         loginPage = new LoginPage(driver);
         mailCreationPage = new MailCreationPage(driver);
-
         inboxPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
+        quickActionsPanelPage = new QuickActionsPanelPage(driver);
+
     }
 
-//    @BeforeMethod(alwaysRun = true)
-//    public void setUpBrowser() throws MalformedURLException {
-//        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--disable-notifications");
-//        driver = new RemoteWebDriver(new URL("http://192.168.100.15:4444/wd/hub"), options);
-//
-//        driver.manage().window().maximize();
-//        driver.get(BASE_URL);
-//
-//        loginPage = new LoginPage(driver);
-//        inboxPage = new InboxPage(driver);
-//        mailCreationPage = new MailCreationPage(driver);
-//
-//        loginPage.setUserName(USERNAME)
-//                .clickLogin()
-//                .setPassword(PASSWORD)
-//                .clickPassword()
-//                .clickOnUsername();
-//    }
-
-    @AfterClass(alwaysRun = true)
+    @AfterMethod(alwaysRun = true)
     public void tearDownBrowser() {
-        driver.close();
-        driver = null;
+        DriverSingleton.closeDriver();
     }
 }

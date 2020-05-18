@@ -1,6 +1,6 @@
 package com.epam.webdriver.model;
 
-import com.epam.webdriver.propertyloader.PropertyLoader;
+import com.epam.webdriver.utils.PropertyLoader;
 import com.github.javafaker.Faker;
 
 import java.util.Objects;
