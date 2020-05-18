@@ -7,16 +7,15 @@ import org.testng.annotations.Test;
 
 public class MailTest extends BaseTest {
 
-    @Test
+    @Test(groups = {"smoke"})
     public void loginTest() {
-
         String actualEmail = quickActionsPanelPage
                 .getActualEmail();
 
         Assert.assertEquals(actualEmail, EMAIL, "Incorrect email is displayed.");
     }
 
-    @Test
+    @Test(groups = {"regression"})
     public void sendEmailToDraftTest() {
         Email expectedEmail = new Email();
 
@@ -28,15 +27,15 @@ public class MailTest extends BaseTest {
                 .fillEmail(expectedEmail)
                 .sendMailAsDraft();
 
-        Email actualEmail = inboxPage.openDraftsFolder()
-                .getActualEmailFromList(expectedEmail);
+        inboxPage.openDraftsFolder();
+
+        Email actualEmail = draftPage.getActualEmailFromList(expectedEmail);
 
         Assert.assertEquals(actualEmail, expectedEmail, "Incorrect email data. Please mail parameters.");
     }
 
-    @Test
+    @Test(groups = {"smoke"})
     public void deleteEmailFromDraft() {
-
         Email email = new Email();
 
         quickActionsPanelPage.openMailBox();
@@ -46,19 +45,19 @@ public class MailTest extends BaseTest {
         mailCreationPage.fillEmail(email)
                 .sendMailAsDraft();
 
-        inboxPage.openDraftsFolder()
-                .checkEmailCheckbox(email);
+        inboxPage.openDraftsFolder();
 
-        boolean isEmailDeleted = inboxPage
+        draftPage.checkEmailCheckbox(email);
+
+        boolean isEmailDeleted = draftPage
                 .clickDeleteEmail()
                 .isEmailDeleted(email);
 
         Assert.assertTrue(isEmailDeleted, "Email was not deleted from inbox.");
     }
 
-    @Test
+    @Test(groups = {"regression"})
     public void updateEmailTest() {
-
         Email email = new Email();
         Email expectedEmailToBeUpdated = new Email();
 
@@ -69,19 +68,22 @@ public class MailTest extends BaseTest {
         mailCreationPage.fillEmail(email)
                 .sendMailAsDraft();
 
-        inboxPage.openDraftsFolder()
-                .openEmail(email);
+        inboxPage.openDraftsFolder();
+
+        draftPage.openEmail(email);
 
         mailCreationPage.fillEmail(expectedEmailToBeUpdated)
                 .sendMail();
 
-        Email actualEmailToBeUpdated = inboxPage.openSendFolder()
+        inboxPage.openSendFolder();
+
+        Email actualEmailToBeUpdated = sendPage
                 .getActualEmailFromList(expectedEmailToBeUpdated);
 
         Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated, "Email was not updated.");
     }
 
-    @Test
+    @Test(groups = {"smoke"})
     public void sendEmailTest() {
         Email expectedEmail = new Email();
 
@@ -91,18 +93,20 @@ public class MailTest extends BaseTest {
 
         mailCreationPage.fillEmail(expectedEmail);
 
-        Email actualEmail = inboxPage.openSendFolder()
-                .getActualEmailFromList(expectedEmail);
+        inboxPage.openSendFolder();
+
+        Email actualEmail = sendPage.getActualEmailFromList(expectedEmail);
 
         Assert.assertEquals(actualEmail, expectedEmail, "Expected email does not exist in the list.");
     }
 
-//    @Test
-//    public void logoutTest() {
-//
-//        boolean isPasswordInputInteractable = quickActionsPanelPage
-//                .clickOnLogoutLink().isPasswordInputDisplayed();
-//
-//        Assert.assertTrue(isPasswordInputInteractable, "User was not logged out.");
-//    }
+    @Test(groups = {"smoke"})
+    public void logoutTest() {
+        quickActionsPanelPage
+                .clickOnLogoutLink();
+
+        boolean isPasswordInputInteractable = loginPage.isPasswordInputDisplayed();
+
+        Assert.assertTrue(isPasswordInputInteractable, "User was not logged out.");
+    }
 }

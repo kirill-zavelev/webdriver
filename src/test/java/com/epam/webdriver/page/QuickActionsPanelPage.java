@@ -27,8 +27,7 @@ public class QuickActionsPanelPage extends AbstractPage {
     }
 
     public InboxPage openMailBox() {
-        waitForElementToBeClickable(mailPage);
-        new Actions(driver).click(mailPage).build().perform();
+        waitForElementToBeClickable(mailPage).click();
 
         return new InboxPage(driver);
     }

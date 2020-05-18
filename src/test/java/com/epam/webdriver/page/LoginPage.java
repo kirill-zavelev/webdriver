@@ -31,16 +31,8 @@ public class LoginPage extends AbstractPage {
     private LoginPage setUserName(String username) {
         userName.sendKeys(username);
         highLightText(userName);
+
         return this;
-    }
-
-    public InboxPage login(String username, String password) {
-        setUserName(username);
-        clickLogin();
-        setPassword(password);
-        clickPassword();
-
-        return new InboxPage(driver);
     }
 
     private LoginPage clickLogin() {
@@ -61,6 +53,15 @@ public class LoginPage extends AbstractPage {
         submitPasswordBtn.click();
 
         return this;
+    }
+
+    public StartPage login(String username, String password) {
+        setUserName(username);
+        clickLogin();
+        setPassword(password);
+        clickPassword();
+
+        return new StartPage(driver);
     }
 
     public boolean isPasswordInputDisplayed() {

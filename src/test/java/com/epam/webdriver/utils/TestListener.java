@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TestListener implements ITestListener {
 
-    private Logger logger = LogManager.getRootLogger();
+    private Logger logger = LogManager.getLogger("logger");
 
     public void onTestStart(ITestResult result) {
 
@@ -25,10 +25,6 @@ public class TestListener implements ITestListener {
 
     public void onTestSuccess(ITestResult result) {
 
-    }
-
-    public void onTestFailure(ITestResult result) {
-        saveScreenshot();
     }
 
     public void onTestSkipped(ITestResult result) {
@@ -44,11 +40,15 @@ public class TestListener implements ITestListener {
     }
 
     public void onFinish(ITestContext context) {
+        logger.info("Test finished");
+    }
 
+    public void onTestFailure(ITestResult result) {
+        saveScreenshot();
     }
 
     private void saveScreenshot() {
-        File screenCapture = ((TakesScreenshot) DriverSingleton
+        File screenCapture = ((TakesScreenshot)DriverSingleton
                 .getDriver())
                 .getScreenshotAs(OutputType.FILE);
         try {

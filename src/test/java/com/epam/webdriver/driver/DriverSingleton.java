@@ -1,5 +1,6 @@
 package com.epam.webdriver.driver;
 
+import com.epam.webdriver.utils.PropertyLoader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,10 +14,11 @@ public class DriverSingleton {
 
     public static WebDriver getDriver() {
         if (null == driver) {
-            switch (System.getProperty("browser")) {
+            switch (PropertyLoader.loadProperty("browser")) {
                 case  "firefox": {
                     WebDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver();
+                    break;
                 }
                 default: {
                     WebDriverManager.chromedriver().setup();

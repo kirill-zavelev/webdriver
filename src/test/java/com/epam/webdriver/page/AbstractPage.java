@@ -51,18 +51,6 @@ public abstract class AbstractPage {
         }
     }
 
-    public WebElement findEmailPreview(List<WebElement> emailPreviews, Email email) {
-        driver.navigate().refresh();
-
-        return emailPreviews
-                .stream()
-                .filter(emailPreview -> emailPreview.getText().contains(email.getSubject())
-                        && emailPreview.getText().contains(email.getRecipient())
-                        && emailPreview.getText().contains(email.getBody()))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("NSE!"));
-    }
-
     protected void highLightText(WebElement element) {
         jsExecutor.executeScript
                 ("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", element);
@@ -72,5 +60,4 @@ public abstract class AbstractPage {
         Actions actions = new Actions(driver);
         actions.contextClick(element).perform();
     }
-
 }

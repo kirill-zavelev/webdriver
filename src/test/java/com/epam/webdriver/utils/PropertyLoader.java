@@ -7,22 +7,13 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class PropertyLoader {
 
-    private static final String PROPERTY_FILE_PATH = "src/test/resources/mail.properties";
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(System.getProperty("environment"));
 
-    public static String loadProperty(String propertyKey) {
-        Properties properties = new Properties();
-        Logger logger = LogManager.getRootLogger();
-        BufferedInputStream stream;
-        try {
-            stream = new BufferedInputStream(new FileInputStream(PROPERTY_FILE_PATH));
-            properties.load(stream);
-            stream.close();
-        } catch (IOException e) {
-            logger.error(e);
-        }
-        return properties.getProperty(propertyKey);
+    public static String loadProperty(String key){
+        return resourceBundle.getString(key);
     }
 }
