@@ -32,8 +32,11 @@ public class BaseTest {
 
         loginPage = new LoginPage(driver);
         mailCreationPage = new MailCreationPage(driver);
+        draftPage = new DraftPage(driver);
+        inboxPage = new InboxPage(driver);
+        sendPage = new SendPage(driver);
         quickActionsPanelPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
-        startPage = loginPage.login(USERNAME,PASSWORD);
+//        startPage = loginPage.login(USERNAME,PASSWORD);
     }
 
     @AfterMethod(alwaysRun = true)

@@ -20,7 +20,7 @@ public class DraftPage extends BasePage {
     @FindBy(xpath = "//a[@href='#draft']")
     private WebElement draftFolderBtn;
 
-    protected DraftPage(WebDriver driver) {
+    public DraftPage(WebDriver driver) {
         super(driver);
     }
 

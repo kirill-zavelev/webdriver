@@ -38,9 +38,8 @@ public class MailTest extends BaseTest {
     public void deleteEmailFromDraft() {
         Email email = new Email();
 
-        quickActionsPanelPage.openMailBox();
-
-        inboxPage.openMailCreationForm();
+        quickActionsPanelPage.openMailBox()
+                .openMailCreationForm();
 
         mailCreationPage.fillEmail(email)
                 .sendMailAsDraft();
