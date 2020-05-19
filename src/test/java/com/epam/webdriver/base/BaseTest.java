@@ -16,7 +16,6 @@ public class BaseTest {
     protected static final String BASE_URL = PropertyLoader.loadProperty("base.url");
 
     protected LoginPage loginPage;
-    protected StartPage startPage;
     protected QuickActionsPanelPage quickActionsPanelPage;
     protected InboxPage inboxPage;
     protected MailCreationPage mailCreationPage;
@@ -36,7 +35,6 @@ public class BaseTest {
         inboxPage = new InboxPage(driver);
         sendPage = new SendPage(driver);
         quickActionsPanelPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
-//        startPage = loginPage.login(USERNAME,PASSWORD);
     }
 
     @AfterMethod(alwaysRun = true)

@@ -12,7 +12,7 @@ public class QuickActionsPanelPage extends AbstractPage {
     @FindBy(className = "user-account__subname")
     private WebElement loggedUserEmail;
 
-    @FindBy(xpath = "//a[text()='Почта']")
+    @FindBy(xpath = "//a[@href='https://mail.yandex.ru']")
     private WebElement mailPage;
 
     @FindBy(xpath = "//a[text()='Выйти']")
@@ -23,6 +23,7 @@ public class QuickActionsPanelPage extends AbstractPage {
     }
 
     public String getActualEmail() {
+
         return loggedUserEmail.getText();
     }
 

@@ -60,16 +60,16 @@ public class MailTest extends BaseTest {
         Email email = new Email();
         Email expectedEmailToBeUpdated = new Email();
 
-        quickActionsPanelPage.openMailBox();
-
-        inboxPage.openMailCreationForm();
+        quickActionsPanelPage
+                .openMailBox()
+                .openMailCreationForm();
 
         mailCreationPage.fillEmail(email)
                 .sendMailAsDraft();
 
-        inboxPage.openDraftsFolder();
-
-        draftPage.openEmail(email);
+        inboxPage
+                .openDraftsFolder()
+                .openEmail(email);
 
         mailCreationPage.fillEmail(expectedEmailToBeUpdated)
                 .sendMail();
