@@ -4,9 +4,10 @@
     <test name="MailTest">
         <groups>
             <run>
-                <include name="regression"/>
-            </run>>
-        </groups>>
+                <exclude name="regression"/>
+                <include name="smoke"/>
+            </run>
+        </groups>
         <classes>
             <class name="com.epam.webdriver.test.MailTest"/>
         </classes>
