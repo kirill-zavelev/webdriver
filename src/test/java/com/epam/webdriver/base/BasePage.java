@@ -32,7 +32,9 @@ public abstract class BasePage extends AbstractPage {
 
         return emailPreviews
                 .stream()
-                .filter(emailPreview -> emailPreview.getText().contains(email.getSubject()))
+                .filter(emailPreview -> emailPreview.getText().contains(email.getSubject())
+                        && emailPreview.getText().contains(email.getRecipient())
+                        && emailPreview.getText().contains(email.getBody()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("NSE!"));
     }
