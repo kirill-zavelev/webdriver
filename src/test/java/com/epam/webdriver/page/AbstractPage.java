@@ -1,6 +1,5 @@
 package com.epam.webdriver.page;
 
-import com.epam.webdriver.model.Email;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;

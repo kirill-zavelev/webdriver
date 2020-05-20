@@ -21,9 +21,7 @@ public abstract class BasePage extends AbstractPage {
     @FindBy(xpath = "//div[@data-key='box=messages-item-box']")
     private List<WebElement> emailPreviews;
 
-    private static final By RECIPIENT = By.className("js-message-snippet-sender");
     private static final By SUBJECT = By.className("mail-MessageSnippet-Item_subject");
-    private static final By EMAIL_BODY = By.className("js-message-snippet-firstline");
 
     protected BasePage(WebDriver driver) {
         super(driver);
@@ -34,9 +32,7 @@ public abstract class BasePage extends AbstractPage {
 
         return emailPreviews
                 .stream()
-                .filter(emailPreview -> emailPreview.getText().contains(email.getSubject())
-                        && emailPreview.getText().contains(email.getRecipient())
-                        && emailPreview.getText().contains(email.getBody()))
+                .filter(emailPreview -> emailPreview.getText().contains(email.getSubject()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("NSE!"));
     }
@@ -51,10 +47,7 @@ public abstract class BasePage extends AbstractPage {
     public Email getActualEmailFromList(Email email) {
         Email actualEmail = new Email();
         WebElement emailPreview = findEmailPreview(emailPreviews, email);
-
-        actualEmail.setRecipient(emailPreview.findElement(RECIPIENT).getText());
         actualEmail.setSubject(emailPreview.findElement(SUBJECT).getText());
-        actualEmail.setBody(emailPreview.findElement(EMAIL_BODY).getText());
 
         return actualEmail;
     }

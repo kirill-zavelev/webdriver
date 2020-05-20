@@ -50,8 +50,6 @@ public class DraftPage extends BasePage {
     public boolean isEmailDeleted(Email email) {
         return emailPreviews
                 .stream()
-                .noneMatch(emailPreview -> !emailPreview.getText().contains(email.getBody()) &&
-                        !emailPreview.getText().contains(email.getRecipient()) &&
-                        !emailPreview.getText().contains(email.getSubject()));
+                .noneMatch(emailPreview -> !emailPreview.getText().contains(email.getSubject()));
     }
 }
