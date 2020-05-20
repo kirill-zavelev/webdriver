@@ -74,9 +74,8 @@ public class MailTest extends BaseTest {
         mailCreationPage.fillEmail(expectedEmailToBeUpdated)
                 .sendMail();
 
-        inboxPage.openSendFolder();
-
-        Email actualEmailToBeUpdated = sendPage
+        Email actualEmailToBeUpdated = inboxPage
+                .openSendFolder()
                 .getActualEmailFromList(expectedEmailToBeUpdated);
 
         Assert.assertEquals(actualEmailToBeUpdated, expectedEmailToBeUpdated, "Email was not updated.");
@@ -92,9 +91,9 @@ public class MailTest extends BaseTest {
 
         mailCreationPage.fillEmail(expectedEmail);
 
-        inboxPage.openSendFolder();
-
-        Email actualEmail = sendPage.getActualEmailFromList(expectedEmail);
+        Email actualEmail = inboxPage
+                .openSendFolder()
+                .getActualEmailFromList(expectedEmail);
 
         Assert.assertEquals(actualEmail, expectedEmail, "Expected email does not exist in the list.");
     }

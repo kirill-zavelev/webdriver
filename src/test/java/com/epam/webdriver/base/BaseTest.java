@@ -20,7 +20,6 @@ public class BaseTest {
     protected InboxPage inboxPage;
     protected MailCreationPage mailCreationPage;
     protected DraftPage draftPage;
-    protected SendPage sendPage;
 
     protected WebDriver driver;
 
@@ -33,7 +32,6 @@ public class BaseTest {
         mailCreationPage = new MailCreationPage(driver);
         draftPage = new DraftPage(driver);
         inboxPage = new InboxPage(driver);
-        sendPage = new SendPage(driver);
         quickActionsPanelPage = loginPage.login(USERNAME, PASSWORD).clickOnUsername();
     }
 

@@ -27,10 +27,10 @@ public class InboxPage extends BasePage {
         return new DraftPage(driver);
     }
 
-    public SendPage openSendFolder() {
+    public InboxPage openSendFolder() {
         waitForElementToBeClickable(sendFolderBtn);
         sendFolderBtn.click();
 
-        return new SendPage(driver);
+        return this;
     }
 }
