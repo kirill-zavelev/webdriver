@@ -89,7 +89,9 @@ public class MailTest extends BaseTest {
 
         inboxPage.openMailCreationForm();
 
-        mailCreationPage.fillEmail(expectedEmail);
+        mailCreationPage
+                .fillEmail(expectedEmail)
+                .sendMail();
 
         Email actualEmail = inboxPage
                 .openSendFolder()
